@@ -16,16 +16,17 @@ import (
 )
 
 // You _must_ export a single `test` function in order for the test runner to call something
+//
 //go:export test
 func test() int32 {
-    // call the tested plugin's "count_vowels" function, passing it some data
+	// call the tested plugin's "count_vowels" function, passing it some data
 	output := xtptest.CallString("count_vowels", []byte("hello"))
-    // check that the output is as expected
+	// check that the output is as expected
 	xtptest.AssertNe("we got some output", output, "")
 
-    // create a named group of tests. NOTE: plugin state is reset before and after the group runs.
+	// create a named group of tests. NOTE: plugin state is reset before and after the group runs.
 	xtptest.Group("check how fast the function performs", func() {
-        // check the amount of time in seconds or nanoseconds spent in the plugin function.
+		// check the amount of time in seconds or nanoseconds spent in the plugin function.
 		sec := xtptest.TimeSeconds("count_vowels", []byte("hello"))
 		xtptest.Assert("it should be fast", sec < 0.1)
 		ns := xtptest.TimeNanos("count_vowels", []byte("hello"))
@@ -41,7 +42,7 @@ func test() int32 {
 		}
 	})
 
-    // as this is an Extism plugin, return a status/error code
+	// as this is an Extism plugin, return a status/error code
 	return 0
 }
 
