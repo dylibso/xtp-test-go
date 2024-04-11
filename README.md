@@ -98,7 +98,7 @@ func test() int32 {
     // ...
 ```
 
-**3. Compile your test and interface to .wasm:**
+**3. Compile your test to .wasm:**
 
 Ensure you have
 [`tinygo` installed](https://tinygo.org/getting-started/install/). Eventually
