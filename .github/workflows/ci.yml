@@ -1,0 +1,38 @@
+name: CI
+on: [pull_request, workflow_dispatch]
+
+jobs:
+  test-example:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        rust:
+          - stable
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          cache: true
+          go-version: '1.21.3'
+
+      - name: Install TinyGo
+        uses: acifani/setup-tinygo@v1.1.0
+        with:
+          tinygo-version: 0.31.2
+          binaryen-version: "117"
+
+      - name: Install XTP CLI
+        run: curl https://static.dylibso.com/cli/install.sh | sudo sh
+
+      - name: Build
+        run: |
+          cd examples/countvowels && tinygo build -o test.wasm -target wasi test.go
+
+      - name: Test example
+        run: |
+          xtp plugin test \
+            https://raw.githubusercontent.com/extism/extism/main/wasm/code.wasm \
+            --with examples/countvowels/test.wasm
