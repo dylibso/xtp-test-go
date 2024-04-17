@@ -68,7 +68,7 @@ documentation page for full details.
 
 ## Usage
 
-**1. Create a Go project using the XTP Test crate**
+**1. Create a Go project using the XTP Test package**
 
 ```sh
 mkdir plugintest && cd plugintest
