@@ -27,12 +27,22 @@ jobs:
       - name: Install XTP CLI
         run: curl https://static.dylibso.com/cli/install.sh | sudo sh
 
-      - name: Build
+      - name: Build Count Vowels Example
         run: |
           cd examples/countvowels && tinygo build -o test.wasm -target wasi test.go
 
-      - name: Test example
+      - name: Test Count Vowels Example
         run: |
           xtp plugin test \
             https://raw.githubusercontent.com/extism/extism/main/wasm/code.wasm \
             --with examples/countvowels/test.wasm
+
+      - name: Build KV Host Function Examples
+        run: |
+          tinygo build -o host.wasm -target wasi examples/kvhost/main.go
+          tinygo build -o plugin.wasm -target wasi examples/kvplugin/main.go
+          tinygo build -o test.wasm -target wasi examples/kvtest/main.go
+      
+      - name: Test KV Host Function Examples
+        run: |
+          xtp plugin test plugin.wasm --with test.wasm --host host.wasm
