@@ -10,7 +10,7 @@ import (
 //go:export test
 func test() int32 {
 	output := xtptest.CallString("run", nil)
-	xtptest.AssertEq("initial call to 'run' returns an empty string", output, "value")
+	xtptest.AssertEq("initial call to 'run' returns the expected value", output, "value")
 
 	xtptest.Group("multiple kv read/write calls produce correct state", func() {
 		for i := 0; i < 10; i++ {
