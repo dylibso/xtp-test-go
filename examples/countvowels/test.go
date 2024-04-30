@@ -14,9 +14,9 @@ func test() int32 {
 
 	xtptest.Group("check how fast the function performs", func() {
 		sec := xtptest.TimeSeconds("count_vowels", []byte("hello"))
-		xtptest.Assert("it should be fast", sec < 0.1)
+		xtptest.Assert("it should be fast", sec < 0.1, fmt.Sprintf("Expected %f < 0.1", sec))
 		ns := xtptest.TimeNanos("count_vowels", []byte("hello"))
-		xtptest.Assert("it should be really fast", ns < 100000)
+		xtptest.Assert("it should be really fast", ns < 100000, fmt.Sprintf("Expected %d < 100000", ns))
 	})
 
 	xtptest.Group("check that count_vowels maintains state", func() {
