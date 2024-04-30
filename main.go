@@ -1,6 +1,9 @@
 package xtptest
 
-import "github.com/extism/go-pdk"
+import (
+	"fmt"
+	"github.com/extism/go-pdk"
+)
 
 //go:wasmimport xtp:test/harness call
 func call(name uint64, input uint64) uint64
@@ -9,7 +12,7 @@ func call(name uint64, input uint64) uint64
 func time(name uint64, input uint64) uint64
 
 //go:wasmimport xtp:test/harness assert
-func assert(name uint64, value uint64)
+func assert(name uint64, value uint64, reason uint64)
 
 //go:wasmimport xtp:test/harness reset
 func reset()
@@ -59,24 +62,26 @@ func TimeSeconds(funcName string, input []byte) float64 {
 }
 
 // Assert that the `outcome` is true, naming the assertion with `msg`, which will be used as a label in the CLI runner.
-func Assert(msg string, outcome bool) {
+func Assert(msg string, outcome bool, reason string) {
 	msgMem := pdk.AllocateString(msg)
+	reasonMem := pdk.AllocateString(reason)
 	var outcomeVal uint64
 	if outcome {
 		outcomeVal = 1
 	}
-	assert(msgMem.Offset(), outcomeVal)
+	assert(msgMem.Offset(), outcomeVal, reasonMem.Offset())
 	msgMem.Free()
+	reasonMem.Free()
 }
 
 // Assert that `x` and `y` are equal, naming the assertion with `msg`, which will be used as a label in the CLI runner.
 func AssertEq(msg string, x any, y any) {
-	Assert(msg, x == y)
+	Assert(msg, x == y, fmt.Sprintf("Expected %v == %v", x, y))
 }
 
 // Assert that `x` and `y` are not equal, naming the assertion with `msg`, which will be used as a label in the CLI runner.
 func AssertNe(msg string, x any, y any) {
-	Assert(msg, x != y)
+	Assert(msg, x != y, fmt.Sprintf("Expected %v != %v", x, y))
 }
 
 // Reset the loaded plugin, clearing all state.
