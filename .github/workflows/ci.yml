@@ -45,4 +45,4 @@ jobs:
       
       - name: Test KV Host Function Examples
         run: |
-          xtp plugin test plugin.wasm --with test.wasm --host host.wasm
+          xtp plugin test plugin.wasm --with test.wasm --mock-host host.wasm
