@@ -1,7 +1,9 @@
 package xtptest
 
 import (
+	"cmp"
 	"fmt"
+
 	"github.com/extism/go-pdk"
 )
 
@@ -82,6 +84,26 @@ func AssertEq(msg string, x any, y any) {
 // Assert that `x` and `y` are not equal, naming the assertion with `msg`, which will be used as a label in the CLI runner.
 func AssertNe(msg string, x any, y any) {
 	Assert(msg, x != y, fmt.Sprintf("Expected %v != %v", x, y))
+}
+
+// Assert that `x` is greater than `y`, naming the assertion with `msg`, which will be used as a label in the CLI runner.
+func AssertGt[T cmp.Ordered](msg string, x T, y T) {
+	Assert(msg, x > y, fmt.Sprintf("Expected %v > %v", x, y))
+}
+
+// Assert that `x` is greater than or equal to `y`, naming the assertion with `msg`, which will be used as a label in the CLI runner.
+func AssertGte[T cmp.Ordered](msg string, x T, y T) {
+	Assert(msg, x >= y, fmt.Sprintf("Expected %v >= %v", x, y))
+}
+
+// Assert that `x` is less than `y`, naming the assertion with `msg`, which will be used as a label in the CLI runner.
+func AssertLt[T cmp.Ordered](msg string, x T, y T) {
+	Assert(msg, x < y, fmt.Sprintf("Expected %v < %v", x, y))
+}
+
+// Assert that `x` is less than or equal to `y`, naming the assertion with `msg`, which will be used as a label in the CLI runner.
+func AssertLte[T cmp.Ordered](msg string, x T, y T) {
+	Assert(msg, x <= y, fmt.Sprintf("Expected %v <= %v", x, y))
 }
 
 // Reset the loaded plugin, clearing all state.
