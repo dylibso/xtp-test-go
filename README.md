@@ -30,7 +30,7 @@ func test() int32 {
 		sec := xtptest.TimeSeconds("count_vowels", []byte("hello"))
 		xtptest.AssertLt("it should be fast", sec, 0.1)
 		ns := xtptest.TimeNanos("count_vowels", []byte("hello"))
-		xtptest.AssertLt("it should be really fast", ns, 100000)
+		xtptest.AssertLt("it should be really fast", ns, 300000)
 	})
 
 	xtptest.Group("check that count_vowels maintains state", func() {
