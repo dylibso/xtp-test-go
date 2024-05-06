@@ -3,20 +3,26 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 
 	xtptest "github.com/dylibso/xtp-test-go"
 )
 
 //go:export test
 func test() int32 {
+	xtptest.AssertGt("gt test", 100, 1)
+	xtptest.AssertLt("lt test", 1, 100)
+	xtptest.AssertGte("gte test", math.Pi, 3.14)
+	xtptest.AssertLte("lte test", 3.14, math.Pi)
+
 	output := xtptest.CallString("count_vowels", []byte("hello"))
 	xtptest.AssertNe("we got some output", output, "")
 
 	xtptest.Group("check how fast the function performs", func() {
 		sec := xtptest.TimeSeconds("count_vowels", []byte("hello"))
-		xtptest.Assert("it should be fast", sec < 0.1, fmt.Sprintf("Expected %f < 0.1", sec))
+		xtptest.AssertLt("it should be fast", sec, 0.1)
 		ns := xtptest.TimeNanos("count_vowels", []byte("hello"))
-		xtptest.Assert("it should be really fast", ns < 100000, fmt.Sprintf("Expected %d < 100000", ns))
+		xtptest.AssertLt("it should be really fast", ns, 300000)
 	})
 
 	xtptest.Group("check that count_vowels maintains state", func() {

@@ -28,9 +28,9 @@ func test() int32 {
 	xtptest.Group("check how fast the function performs", func() {
 		// check the amount of time in seconds or nanoseconds spent in the plugin function.
 		sec := xtptest.TimeSeconds("count_vowels", []byte("hello"))
-		xtptest.Assert("it should be fast", sec < 0.1)
+		xtptest.AssertLt("it should be fast", sec, 0.1)
 		ns := xtptest.TimeNanos("count_vowels", []byte("hello"))
-		xtptest.Assert("it should be really fast", ns < 100000)
+		xtptest.AssertLt("it should be really fast", ns, 300000)
 	})
 
 	xtptest.Group("check that count_vowels maintains state", func() {
@@ -122,9 +122,9 @@ curl https://static.dylibso.com/cli/install.sh | sudo sh
 ### Run the test suite
 
 ```sh
-xtp plugin test ./plugin-*.wasm --with test.wasm --host host.wasm
-#               ^^^^^^^^^^^^^^^        ^^^^^^^^^        ^^^^^^^^^
-#               your plugin(s)         test to run      optional mock host functions
+xtp plugin test ./plugin-*.wasm --with test.wasm --mock-host host.wasm
+#               ^^^^^^^^^^^^^^^        ^^^^^^^^^             ^^^^^^^^^
+#               your plugin(s)         test to run           optional mock host functions
 ```
 
 **Note:** The optional mock host functions must be implemented as Extism
