@@ -22,6 +22,9 @@ func reset()
 //go:wasmimport xtp:test/harness group
 func group(name uint64)
 
+//go:wasmimport xtp:test/harness mock_input
+func mock_input() uint64
+
 // Call a function from the Extism plugin being tested, passing input and returning its output Memory.
 func Call(funcName string, input []byte) pdk.Memory {
 	funcMem := pdk.AllocateString(funcName)
@@ -124,4 +127,25 @@ func Group(name string, tests func()) {
 	startGroup(name)
 	tests()
 	Reset()
+}
+
+// Read the mock test input provided by the test runner, returns a Memory object.
+// This input is defined in an xtp.toml file, or by the --mock-input-data or --mock-input-file flags.
+func MockInput() pdk.Memory {
+	outputPtr := mock_input()
+	return pdk.FindMemory(outputPtr)
+}
+
+// Read the mock test input provided by the test runner, returns the input as []byte.
+// This input is defined in an xtp.toml file, or by the --mock-input-data or --mock-input-file flags.
+func MockInputBytes() []byte {
+	inputMem := MockInput()
+	defer inputMem.Free()
+	return inputMem.ReadBytes()
+}
+
+// Read the mock test input provided by the test runner, returns the input as a string.
+// This input is defined in an xtp.toml file, or by the --mock-input-data or --mock-input-file flags.
+func MockInputString() string {
+	return string(MockInputBytes())
 }

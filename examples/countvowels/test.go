@@ -10,6 +10,9 @@ import (
 
 //go:export test
 func test() int32 {
+	notEmpty := xtptest.CallString("count_vowels", xtptest.MockInputBytes())
+	xtptest.AssertNe("with mock, not empty", notEmpty, "")
+
 	xtptest.AssertGt("gt test", 100, 1)
 	xtptest.AssertLt("lt test", 1, 100)
 	xtptest.AssertGte("gte test", math.Pi, 3.14)
